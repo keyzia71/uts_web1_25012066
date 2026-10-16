@@ -1,3 +1,4 @@
+
 <?php
 require_once __DIR__ . '/data/menu.php';
 
@@ -97,6 +98,30 @@ require_once __DIR__ . '/includes/header.php';
         border-radius: 8px;
     }
 
+    /* CSS Form Pemesanan */
+    .form-pemesanan .field {
+        margin-bottom: 18px;
+    }
+
+    .form-pemesanan input,
+    .form-pemesanan select {
+        width: 100%;
+        max-width: 100%;
+        padding: 11px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+    }
+
+    .form-pemesanan small {
+        display: block;
+        margin-top: 5px;
+        color: #64748b;
+    }
+
+    .form-pemesanan button {
+        width: 100%;
+    }
+
     @media (max-width: 600px) {
         .menu-table th,
         .menu-table td {
@@ -134,13 +159,11 @@ require_once __DIR__ . '/includes/header.php';
                 id="q"
                 name="q"
                 placeholder="Contoh: Nasi Goreng"
-                value="<?php
-                    echo htmlspecialchars(
-                        $pencarian,
-                        ENT_QUOTES,
-                        'UTF-8'
-                    );
-                ?>"
+                value="<?php echo htmlspecialchars(
+                    $pencarian,
+                    ENT_QUOTES,
+                    'UTF-8'
+                ); ?>"
             >
         </div>
 
@@ -153,7 +176,8 @@ require_once __DIR__ . '/includes/header.php';
     <h2>Menu Tersedia</h2>
 
     <p class="jumlah-menu">
-        Jumlah menu ditemukan: <?php echo count($hasilMenu); ?>
+        Jumlah menu ditemukan:
+        <?php echo count($hasilMenu); ?>
     </p>
 
     <?php if (count($hasilMenu) > 0) { ?>
@@ -180,33 +204,27 @@ require_once __DIR__ . '/includes/header.php';
                             <td><?php echo $nomor++; ?></td>
 
                             <td>
-                                <?php
-                                echo htmlspecialchars(
+                                <?php echo htmlspecialchars(
                                     $item['kode'],
                                     ENT_QUOTES,
                                     'UTF-8'
-                                );
-                                ?>
+                                ); ?>
                             </td>
 
                             <td>
-                                <?php
-                                echo htmlspecialchars(
+                                <?php echo htmlspecialchars(
                                     $item['nama'],
                                     ENT_QUOTES,
                                     'UTF-8'
-                                );
-                                ?>
+                                ); ?>
                             </td>
 
                             <td>
-                                <?php
-                                echo htmlspecialchars(
+                                <?php echo htmlspecialchars(
                                     $item['kategori'],
                                     ENT_QUOTES,
                                     'UTF-8'
-                                );
-                                ?>
+                                ); ?>
                             </td>
 
                             <td class="harga-menu">
@@ -234,6 +252,74 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
     <?php } ?>
+</section>
+
+<!-- FORM PEMESANAN TAHAP 3 -->
+<section class="panel">
+    <h2>Form Pemesanan</h2>
+
+    <p>
+        Pilih kode menu yang tersedia dan masukkan
+        jumlah pembelian antara 1 sampai 10.
+    </p>
+
+    <form
+        action="proses.php"
+        method="post"
+        class="form-pemesanan"
+    >
+        <div class="field">
+            <label for="kode_menu">Kode Menu</label>
+
+            <select
+                id="kode_menu"
+                name="kode_menu"
+                required
+            >
+                <option value="">-- Pilih Menu --</option>
+
+                <?php foreach ($menu as $item) { ?>
+                    <option value="<?php echo htmlspecialchars(
+                        $item['kode'],
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ); ?>">
+                        <?php echo htmlspecialchars(
+                            $item['kode'] . ' - ' .
+                            $item['nama'] . ' (' .
+                            rupiah($item['harga']) . ')',
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ); ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="jumlah">Jumlah Pembelian</label>
+
+            <input
+                type="number"
+                id="jumlah"
+                name="jumlah"
+                placeholder="Masukkan jumlah 1–10"
+                min="1"
+                max="10"
+                step="1"
+                required
+            >
+
+            <small>
+                Jumlah pembelian harus bilangan bulat
+                antara 1 sampai 10.
+            </small>
+        </div>
+
+        <button type="submit">
+            Tambah Pesanan
+        </button>
+    </form>
 </section>
 
 <?php
